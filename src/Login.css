@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.login > a > h1 {
+    color: black;
+}
+
 .login__logo {
     margin-top: 20px;
     margin-bottom: 20px;

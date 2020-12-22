@@ -38,7 +38,7 @@ function Login() {
     
         <div className='login'>
             <Link to='/'>
-                <img className="login__logo" src='https://www.marketplace.org/wp-content/uploads/2019/07/ama2.png?resize=740%2C204' />
+                <h1>Store</h1>
             </Link>   
 
             <div className='login__container'>

@@ -1,63 +1,52 @@
-import React from 'react';
+import React, { useState , useEffect } from 'react';
 import './Home.css';
-import Product from './Product';
+import { useStateValue } from './StateProvider';
 
 function Home() {
+    const [{ basket }, dispatch] = useStateValue();
+
+    const url = 'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15'
+    const [todos, setTodos] = useState()
+    const fetchApi = async () => {
+    const response = await fetch(url)
+    const responseJSON = await response.json()
+    setTodos(responseJSON)
+    }
+
+  useEffect(() => {
+    fetchApi()
+  }, [])
+
+  const addToBasket = () => {
+    //dispatch some action
+    dispatch({
+        type: 'ADD_TO_BASKET',
+        // todo: {
+        //     id: id,
+        //     title: title,
+        //     image: image,
+        //     price: price,
+        //     rating: rating,
+        // },
+    });
+}; 
+
     return (
         <div className="home">
             <div className="home__container">
-                <img  className="home__image" src="https://images-eu.ssl-images-amazon.com/images/G/02/digital/video/merch2016/Hero/Covid19/Generic/GWBleedingHero_ENG_COVIDUPDATE__XSite_1500x600_PV_en-GB._CB428684220_.jpg" 
-                alt="" />
-
-                <div className="home__row">
-                    <Product 
-                    id="23154879"
-                    title='The lean startup' 
-                    price={29.99} 
-                    image="https://images-na.ssl-images-amazon.com/images/I/51Zymoq7UnL._AC_SY400_.jpg" 
-                    rating={5} />
-                    <Product 
-                    id="49538094"
-                    title="Kenwood kMix Stand Mixer for Baking, Stylish Kitchen Mixer with K-beater, Dough Hook and Whisk, 5 Litre Glass Bowl"
-                    price={239.0}
-                    rating={4}
-                    image="https://images-na.ssl-images-amazon.com/images/I/61aT8jl8THL._AC_SL1001_.jpg"
-                    />
+                <div className="row">
+                    { !todos ? 'Cargando' :
+                    todos.map( (todo,index) => {
+                        return <div className="box">
+                                    <img  className="home__image" src={todo.thumb} 
+                                    alt="" />{todo.title} 
+                                    <div>$ {todo.normalPrice} </div>
+                                    <button onClick={addToBasket}>Add to basket</button>
+                                </div>
+                    })
+                    }
                 </div>
-
-                <div className="home__row">
-                    <Product 
-                    id="23445930"
-                    title="Samsung LC49RG90SSUXEN 49' Curved LED GAMING MONITOR"
-                    price={199.99}
-                    rating={3}
-                    image="https://images-na.ssl-images-amazon.com/images/I/71Swqqe7XAL._AC_SX466_.jpg"
-                    />
-                    <Product 
-                    id="23445930"
-                    title="Amazon Echo (3rd generation) | Smart speaker with Alex, Charcoal Fabric"
-                    price={98.99}
-                    rating={5}
-                    image="https://media.very.co.uk/i/very/P6LTG_SQ1_0000000071_CHARCOAL_SLf?$300x400_retinamobilex2$"
-                    />
-                    <Product 
-                    id="3254354345"
-                    title="New Apple iPad Pro (12.9-inch, Wi-Fi, 128GB) - Silver (4th Generation)"
-                    price={598.99}
-                    rating={4}
-                    image="https://images-na.ssl-images-amazon.com/images/I/816ctt5WV5L._AC_SX385_.jpg"
-                    />
-                </div>
-
-                <div className="home__row">
-                    <Product 
-                    id="90829332"
-                    title="Samsung LC49RG90SSUXEN 49' Curved LED GAMING MONITOR - Super Ultra Wide Dual"
-                    price={199.99}
-                    rating={3}
-                    image="https://images-na.ssl-images-amazon.com/images/I/6125mFrzr6L._AC_SX355_.jpg"/>
-                </div>
-
+               
             </div>
         </div>
     )
